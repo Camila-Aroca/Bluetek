@@ -1,7 +1,10 @@
 import { Routes, Route, Navigate} from 'react-router-dom'
 import { Login } from './pages/Login'
+<<<<<<< HEAD
 import { RegisterMaintainer } from './pages/RegisterMaintainer'
 import { RegisterUser } from './pages/RegisterUser'
+=======
+>>>>>>> origin/main
 import { Home } from './pages/Home'
 import { NotFound } from './pages/NotFound'
 import { DetalleSensor } from './pages/DetalleSensor'
@@ -17,12 +20,15 @@ function App() {
         {/* Login */}
         <Route path="/login" element={<Login />} />
 
+<<<<<<< HEAD
         {/* Registro usuario de mantención */}
         <Route path="/register-maintainer" element={<RegisterMaintainer />} />
 
         {/* Registro usuario común */}
         <Route path="/register-user" element={<RegisterUser />} />
 
+=======
+>>>>>>> origin/main
         {/* Home protegido */}
         <Route
           path="/home"
