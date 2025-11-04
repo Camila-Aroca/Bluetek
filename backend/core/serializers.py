@@ -1,13 +1,13 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from .models import HABITACION, MEDICION_THERMOSTATO, THERMOSTATO
 
-#PUEDE QUE HAYA QUE CAMBIAR LA FORMA DE SERIALIZAR LOS USUARIOS PARA PERMITIR TIPO_USUARIO
+User = get_user_model()
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email')
+        fields = ('id', 'username', 'email', 'tipo_usuario')
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()

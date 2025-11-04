@@ -1,5 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
+#CUSTOM USER CON CAMPO TIPO_USUARIO
+class USUARIO(AbstractUser):
+    TIPOS = [
+        ('ADMIN', 'Administrador'),
+        ('COMUN', 'comun')
+    ]
+    tipo_usuario = models.CharField(max_length=20, choices=TIPOS, default='COMUN')
+
+    class Meta:
+        db_table = 'USUARIO'
 
 class ESTACION_METEOROLOGICA(models.Model):
     codigo_nacional = models.CharField(max_length=100, primary_key=True)

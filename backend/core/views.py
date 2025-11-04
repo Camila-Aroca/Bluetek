@@ -7,10 +7,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .serializers import HabitacionSerializer, MedicionSerializer, ThermostatoSerializer, UserSerializer, LoginSerializer
 from rest_framework.permissions import IsAuthenticated
 from .models import HABITACION, MEDICION_THERMOSTATO, THERMOSTATO
+
+User = get_user_model()
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))  # <-- obligamos a autenticación
@@ -25,11 +27,17 @@ def registro(request):
     username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
+    tipo_usuario = request.data.get('tipo_usuario', 'COMUN')
     
     if User.objects.filter(username=username).exists():
         return Response({'error': 'Usuario ya existe'}, status=400)
     
-    user = User.objects.create_user(username=username, email=email, password=password)
+    user = User.objects.create_user(
+        username=username, 
+        email=email, 
+        password=password,
+        tipo_usuario = tipo_usuario)
+    
     token, created = Token.objects.get_or_create(user=user)
     
     return Response({
