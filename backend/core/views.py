@@ -15,35 +15,39 @@ from .models import HABITACION, MEDICION_THERMOSTATO, THERMOSTATO
 User = get_user_model()
 
 @api_view(['POST'])
-@permission_classes((IsAuthenticated,))  # <-- obligamos a autenticación
+#ENDPOINT PREVIAMENTE CON AUTENTICACION REQUERIDA @permission_classes((IsAuthenticated,))
 def registro(request):
-    # validar que el usuario autenticado sea superuser
-    if not request.user.is_superuser:
-        return Response(
-            {"error": "No tienes permisos para crear usuarios."},
-            status=status.HTTP_403_FORBIDDEN
-        )
-    
+    # Datos del request
     username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
-    tipo_usuario = request.data.get('tipo_usuario', 'COMUN')
-    
+    first_name = request.data.get('first_name', '')
+    last_name = request.data.get('last_name', '')
+    tipo_usuario = request.data.get('tipo_usuario', 'COMUN')  # Por defecto
+
+    # Validaciones básicas
+    if not username or not password:
+        return Response({'error': 'Debe ingresar un nombre de usuario y contraseña.'}, status=400)
+
     if User.objects.filter(username=username).exists():
-        return Response({'error': 'Usuario ya existe'}, status=400)
-    
+        return Response({'error': 'El usuario ya existe.'}, status=400)
+
+    # Crear usuario común
     user = User.objects.create_user(
-        username=username, 
-        email=email, 
+        username=username,
+        email=email,
         password=password,
-        tipo_usuario = tipo_usuario)
-    
+        first_name=first_name,
+        last_name=last_name,
+        tipo_usuario=tipo_usuario
+    )
+
     token, created = Token.objects.get_or_create(user=user)
-    
+
     return Response({
         'token': token.key,
         'user': UserSerializer(user).data
-    })
+    }, status=200)
 
 @api_view(['POST'])
 def login(request):
