@@ -72,7 +72,7 @@ export function RegisterUser (){
         setError(data?.detail || 'No fue posible registrar el usuario.')
       }
     } catch (err) {
-      setError('Error de red. Inténtalo nuevamente.')
+      setError('Error de red. Inténtalo nuevamente.', err)
     } finally {
       setLoading(false)
     }
